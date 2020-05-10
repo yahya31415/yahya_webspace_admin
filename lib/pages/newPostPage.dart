@@ -24,6 +24,16 @@ class NewPostPage extends StatelessWidget {
                 FlatButton(
                   child: Text('CLEAR'),
                   onPressed: clear,
+                ),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: IconButton(
+                    icon: Icon(Icons.keyboard_hide),
+                    onPressed: () {
+                      dismissKeyboard(context);
+                    },
+                  ),
                 )
               ],
             ),
@@ -31,6 +41,13 @@ class NewPostPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void dismissKeyboard(BuildContext context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
   }
 
   Row formatterBar() {
@@ -120,9 +137,11 @@ class NewPostPage extends StatelessWidget {
     controller.text = half1 + insert + half2;
   }
 
-  void post(BuildContext context) {
+  void post(BuildContext context) async {
     final currentValue = controller.text;
-    BlocedWidget.of(context).bloc.newPost(currentValue);
+    await BlocedWidget.of(context).bloc.newPost(currentValue);
+    controller.clear();
+    dismissKeyboard(context);
   }
 
   void clear() {
