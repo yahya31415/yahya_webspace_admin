@@ -13,11 +13,11 @@ class NewPostPage extends StatelessWidget {
             children: <Widget>[
               IconButton(
                 icon: Text('H1'),
-                onPressed: () => format(),
+                onPressed: () => format(FormatOption.heading1),
               ),
               IconButton(
                 icon: Text('H2'),
-                onPressed: () => format(),
+                onPressed: () => format(FormatOption.heading2),
               ),
 //              IconButton(
 //                icon: Text('H3'),
@@ -25,23 +25,23 @@ class NewPostPage extends StatelessWidget {
 //              ),
               IconButton(
                 icon: Icon(Icons.format_bold),
-                onPressed: () => format(),
+                onPressed: () => format(FormatOption.bold),
               ),
               IconButton(
                 icon: Icon(Icons.format_italic),
-                onPressed: () => format(),
+                onPressed: () => format(FormatOption.italics),
               ),
               IconButton(
                 icon: Icon(Icons.link),
-                onPressed: () => format(),
+                onPressed: () => format(FormatOption.link),
               ),
               IconButton(
                 icon: Icon(Icons.code),
-                onPressed: () => format(),
+                onPressed: () => format(FormatOption.code),
               ),
               IconButton(
                 icon: Icon(Icons.image),
-                onPressed: () => format(),
+                onPressed: () => format(FormatOption.image),
               )
             ],
           ),
@@ -74,6 +74,7 @@ class NewPostPage extends StatelessWidget {
           expands: true,
           minLines: null,
           maxLines: null,
+          controller: controller,
           decoration: InputDecoration(
             hintText: 'Write here...',
             border: InputBorder.none,
@@ -85,9 +86,41 @@ class NewPostPage extends StatelessWidget {
     );
   }
 
-  void format() {}
+  void format(FormatOption option) {
+    final currentValue = controller.text;
+    final cursorPosition = controller.selection.end;
+    final half1 = currentValue.substring(0, cursorPosition);
+    final half2 = currentValue.substring(cursorPosition, currentValue.length);
+    var insert = '';
+    switch (option) {
+      case FormatOption.heading1:
+        insert = '## ';
+        break;
+      case FormatOption.heading2:
+        insert = '### ';
+        break;
+      case FormatOption.bold:
+        insert = '**b**';
+        break;
+      case FormatOption.italics:
+        insert = '*i*';
+        break;
+      case FormatOption.link:
+        insert = '[text](url)';
+        break;
+      case FormatOption.code:
+        insert = '```code```';
+        break;
+      case FormatOption.image:
+        insert = '![alt](url "title")';
+        break;
+    }
+    controller.text = half1 + insert + half2;
+  }
 
   void post() {}
 
   void clear() {}
 }
+
+enum FormatOption { heading1, heading2, bold, italics, link, code, image }
