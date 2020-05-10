@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+
 class NewPostPage extends StatelessWidget {
   final controller = TextEditingController();
 
@@ -9,42 +11,7 @@ class NewPostPage extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              IconButton(
-                icon: Text('H1'),
-                onPressed: () => format(FormatOption.heading1),
-              ),
-              IconButton(
-                icon: Text('H2'),
-                onPressed: () => format(FormatOption.heading2),
-              ),
-//              IconButton(
-//                icon: Text('H3'),
-//                onPressed: () => format(),
-//              ),
-              IconButton(
-                icon: Icon(Icons.format_bold),
-                onPressed: () => format(FormatOption.bold),
-              ),
-              IconButton(
-                icon: Icon(Icons.format_italic),
-                onPressed: () => format(FormatOption.italics),
-              ),
-              IconButton(
-                icon: Icon(Icons.link),
-                onPressed: () => format(FormatOption.link),
-              ),
-              IconButton(
-                icon: Icon(Icons.code),
-                onPressed: () => format(FormatOption.code),
-              ),
-              IconButton(
-                icon: Icon(Icons.image),
-                onPressed: () => format(FormatOption.image),
-              )
-            ],
-          ),
+          formatterBar(),
           _textField(context),
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
@@ -52,7 +19,7 @@ class NewPostPage extends StatelessWidget {
               children: <Widget>[
                 FlatButton(
                   child: Text('POST'),
-                  onPressed: post,
+                  onPressed: () => post(context),
                 ),
                 FlatButton(
                   child: Text('CLEAR'),
@@ -63,6 +30,41 @@ class NewPostPage extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  Row formatterBar() {
+    return Row(
+      children: <Widget>[
+        IconButton(
+          icon: Text('H1'),
+          onPressed: () => format(FormatOption.heading1),
+        ),
+        IconButton(
+          icon: Text('H2'),
+          onPressed: () => format(FormatOption.heading2),
+        ),
+        IconButton(
+          icon: Icon(Icons.format_bold),
+          onPressed: () => format(FormatOption.bold),
+        ),
+        IconButton(
+          icon: Icon(Icons.format_italic),
+          onPressed: () => format(FormatOption.italics),
+        ),
+        IconButton(
+          icon: Icon(Icons.link),
+          onPressed: () => format(FormatOption.link),
+        ),
+        IconButton(
+          icon: Icon(Icons.code),
+          onPressed: () => format(FormatOption.code),
+        ),
+        IconButton(
+          icon: Icon(Icons.image),
+          onPressed: () => format(FormatOption.image),
+        )
+      ],
     );
   }
 
@@ -118,9 +120,14 @@ class NewPostPage extends StatelessWidget {
     controller.text = half1 + insert + half2;
   }
 
-  void post() {}
+  void post(BuildContext context) {
+    final currentValue = controller.text;
+    BlocedWidget.of(context).bloc.newPost(currentValue);
+  }
 
-  void clear() {}
+  void clear() {
+    controller.clear();
+  }
 }
 
 enum FormatOption { heading1, heading2, bold, italics, link, code, image }

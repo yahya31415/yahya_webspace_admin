@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yahya_webspace_admin/pages/newPostPage.dart';
+import 'package:yahya_webspace_admin/pages/postsPage.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   Widget get body {
     switch (currentTab) {
       case 0:
-        return Container();
+        return PostsPage();
       case 1:
         return NewPostPage();
       default:
