@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:yahya_webspace_admin/pages/newPostPage.dart';
 import 'package:yahya_webspace_admin/pages/postsPage.dart';
@@ -29,28 +30,57 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    return StreamBuilder<FirebaseUser>(
+        stream: FirebaseAuth.instance.onAuthStateChanged,
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return _loginPage();
+          }
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Yahya\'s Webspace'),
+            ),
+            body: body,
+            bottomNavigationBar: BottomNavigationBar(
+              items: <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.short_text),
+                  title: Text('Posts'),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.edit),
+                  title: Text('New'),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.settings),
+                  title: Text('Settings'),
+                )
+              ],
+              onTap: setCurrentTab,
+              currentIndex: currentTab,
+            ),
+          );
+        });
+  }
+
+  Widget _loginPage() {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Yahya\'s Webspace'),
+        title: Text('Log in to Yahya\'s Webspace'),
       ),
-      body: body,
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.short_text),
-            title: Text('Posts'),
+      body: ListView(
+        children: <Widget>[
+          TextField(
+            keyboardType: TextInputType.emailAddress,
+            decoration:
+                InputDecoration(hintText: 'Email ID', border: InputBorder.none),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.edit),
-            title: Text('New'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            title: Text('Settings'),
+          TextField(
+            keyboardType: TextInputType.visiblePassword,
+            decoration:
+                InputDecoration(hintText: 'Password', border: InputBorder.none),
           )
         ],
-        onTap: setCurrentTab,
-        currentIndex: currentTab,
       ),
     );
   }
