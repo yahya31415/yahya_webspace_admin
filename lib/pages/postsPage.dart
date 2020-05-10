@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:markdown/markdown.dart' as md;
 import 'package:yahya_webspace_admin/main.dart';
 
 class PostsPage extends StatelessWidget {
@@ -23,7 +25,9 @@ class PostsPage extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Text(post),
+        child: Html(
+          data: md.markdownToHtml(post),
+        ),
       ),
     );
   }
