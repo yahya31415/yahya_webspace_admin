@@ -19,6 +19,12 @@ class PostsPage extends StatelessWidget {
   }
 
   Widget _post(String post) {
-    return Text(post);
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(post),
+      ),
+    );
   }
 }
