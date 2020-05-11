@@ -8,10 +8,11 @@ class NewPostPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      elevation: 3,
+      margin: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
       child: Column(
         children: <Widget>[
-          formatterBar(),
+          formatterBar(context),
           _textField(context),
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
@@ -20,10 +21,12 @@ class NewPostPage extends StatelessWidget {
                 FlatButton(
                   child: Text('POST'),
                   onPressed: () => post(context),
+                  textColor: Theme.of(context).buttonColor,
                 ),
                 FlatButton(
                   child: Text('CLEAR'),
                   onPressed: clear,
+                  textColor: Theme.of(context).hintColor,
                 ),
                 Spacer(),
                 Padding(
@@ -33,6 +36,7 @@ class NewPostPage extends StatelessWidget {
                     onPressed: () {
                       dismissKeyboard(context);
                     },
+                    color: Theme.of(context).hintColor,
                   ),
                 )
               ],
@@ -50,36 +54,44 @@ class NewPostPage extends StatelessWidget {
     }
   }
 
-  Row formatterBar() {
+  Row formatterBar(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         IconButton(
           icon: Text('H1'),
           onPressed: () => format(FormatOption.heading1),
+          color: Theme.of(context).hintColor,
         ),
         IconButton(
           icon: Text('H2'),
           onPressed: () => format(FormatOption.heading2),
+          color: Theme.of(context).hintColor,
         ),
         IconButton(
           icon: Icon(Icons.format_bold),
           onPressed: () => format(FormatOption.bold),
+          color: Theme.of(context).hintColor,
         ),
         IconButton(
           icon: Icon(Icons.format_italic),
           onPressed: () => format(FormatOption.italics),
+          color: Theme.of(context).hintColor,
         ),
         IconButton(
           icon: Icon(Icons.link),
           onPressed: () => format(FormatOption.link),
+          color: Theme.of(context).hintColor,
         ),
         IconButton(
           icon: Icon(Icons.code),
           onPressed: () => format(FormatOption.code),
+          color: Theme.of(context).hintColor,
         ),
         IconButton(
           icon: Icon(Icons.image),
           onPressed: () => format(FormatOption.image),
+          color: Theme.of(context).hintColor,
         )
       ],
     );

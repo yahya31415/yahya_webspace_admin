@@ -9,7 +9,7 @@ class AppTheme {
         scaffoldBackgroundColor: Colors.grey.shade900,
         canvasColor: Colors.grey.shade900,
         dialogBackgroundColor: Colors.grey.shade800,
-        cardColor: Colors.grey.shade800,
+        cardColor: Colors.grey.shade900,
         appBarTheme: AppBarTheme(
           color: Colors.transparent,
           elevation: 0,
