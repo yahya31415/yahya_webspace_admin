@@ -11,6 +11,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int currentTab = 0;
 
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
   void setCurrentTab(int index) {
     setState(() {
       currentTab = index;
@@ -65,23 +68,84 @@ class _HomePageState extends State<HomePage> {
 
   Widget _loginPage() {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Log in to Yahya\'s Webspace'),
-      ),
-      body: ListView(
-        children: <Widget>[
-          TextField(
-            keyboardType: TextInputType.emailAddress,
-            decoration:
-                InputDecoration(hintText: 'Email ID', border: InputBorder.none),
-          ),
-          TextField(
-            keyboardType: TextInputType.visiblePassword,
-            decoration:
-                InputDecoration(hintText: 'Password', border: InputBorder.none),
-          )
-        ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Expanded(
+              flex: 5,
+              child: Center(
+                child: Image.asset(
+                  "assets/yahya-webspace-login.png",
+                  height: 260,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Log in to admin',
+                  style: Typography.whiteCupertino.headline1
+                      .copyWith(fontSize: 26),
+                ),
+              ),
+            ),
+            TextField(
+              keyboardType: TextInputType.emailAddress,
+              controller: emailController,
+              decoration: InputDecoration(
+                hintText: 'Email ID',
+              ),
+            ),
+            TextField(
+              keyboardType: TextInputType.visiblePassword,
+              controller: passwordController,
+              decoration: InputDecoration(
+                hintText: 'Password',
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: RaisedButton(
+                child: Text('Log In'),
+                onPressed: () => _logIn(context),
+              ),
+            ),
+            Spacer(flex: 1)
+          ],
+        ),
       ),
     );
+  }
+
+  _logIn(BuildContext context) async {
+    final email = emailController.text;
+    final password = passwordController.text;
+
+    showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('Logging In'),
+          content: LinearProgressIndicator(),
+        ));
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      Navigator.pop(context);
+    } catch (error) {
+      Navigator.pop(context);
+      showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text('Error'),
+            content: Text(error.toString()),
+          ));
+    }
   }
 }
