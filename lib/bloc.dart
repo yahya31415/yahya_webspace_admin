@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 
 class Bloc {
@@ -5,46 +6,27 @@ class Bloc {
 
   final _postsSubject = BehaviorSubject<List<String>>();
 
+  CollectionReference get postsCollection =>
+      Firestore.instance.collection("posts");
+
   Bloc() {
     fetchPosts();
   }
 
   Future fetchPosts() async {
-    _postsSubject.add([
-      '''
-## Introduction
-
-I am making a blog for myself
-
-### Why?
-
-Because why not
-
-### Still there must be some reason
-
-Not really, no reason
-
-## Features
-
-1. It supports **bold text**
-2. Also *italic texts*
-3. And it can do [links](http://caprimul.com)
-4. Even images
-
-![some image](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "caprimul")
-
-**And last but not least**
-
-```dart
-final result  = ‘I can write code here’;
-```
-    '''
-    ]);
+    postsCollection.snapshots().listen((event) {
+      final docs = event.documents;
+      final data = <String>[];
+      docs.forEach((element) => data.add(element["content"]));
+      _postsSubject.add(data);
+    });
   }
 
   Future newPost(String content) async {
-    final _posts = posts.value;
-    _posts.add(content);
-    _postsSubject.add(_posts);
+    postsCollection.add({
+      "content": content,
+      "timestamp": DateTime.now().millisecondsSinceEpoch,
+      "published": false,
+    });
   }
 }
